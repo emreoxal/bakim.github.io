@@ -272,7 +272,7 @@
     <button class="add-row-button" onclick="clearTable()">Verileri Sil</button>
 
     <!-- Alarm sesi için audio elementi -->
-    <audio id="alarmSound" src="alarm.mp3" loop></audio>
+    <audio id="alarmSound" src="images/alarm.mp3" loop></audio>
 
     <!-- SheetJS kütüphanesi -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
@@ -377,13 +377,28 @@ function toggleTimer() {
             }
         }
 
-        function triggerAlarm() {
-            document.getElementById('alarmSound').play();
-            document.getElementById('startPauseButton').textContent = 'SUSTUR';
-            document.getElementById('startPauseButton').style.backgroundColor = 'red';
-            flashing = true;
-            flashBackground();
+function triggerAlarm() {
+    const alarmSound = document.getElementById('alarmSound');
+    alarmSound.volume = 0.1; // Ses seviyesini düşük başlat (0.1 = %10)
+    alarmSound.play();
+    
+    document.getElementById('startPauseButton').textContent = 'SUSTUR';
+    document.getElementById('startPauseButton').style.backgroundColor = 'red';
+    flashing = true;
+    flashBackground();
+    
+    // Ses seviyesini kademeli olarak artır
+    let volume = 0.1;
+    const volumeIncreaseInterval = setInterval(() => {
+        if (volume < 1.0) {
+            volume += 0.05;
+            if (volume > 1.0) volume = 1.0;
+            alarmSound.volume = volume;
+        } else {
+            clearInterval(volumeIncreaseInterval);
         }
+    }, 500); // Her 500ms'de bir sesi %5 artır
+}
 
         function flashBackground() {
             if (!flashing) return;
@@ -392,13 +407,16 @@ function toggleTimer() {
         }
 
 function stopAlarm() {
-    document.getElementById('alarmSound').pause();
-    document.getElementById('alarmSound').currentTime = 0;
+    const alarmSound = document.getElementById('alarmSound');
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
+    alarmSound.volume = 1.0; // Ses seviyesini sıfırla
+    
     document.getElementById('startPauseButton').textContent = 'BAŞLAT';
     document.getElementById('startPauseButton').style.backgroundColor = '#4CAF50';
     flashing = false;
     document.body.style.backgroundColor = '#282c36';
-    isRunning = false; // Ekstra güvenlik için
+    isRunning = false;
 }
 
         function setActiveButton(button) {
