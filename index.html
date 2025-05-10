@@ -391,7 +391,7 @@ function triggerAlarm() {
     let volume = 0.1;
     const volumeIncreaseInterval = setInterval(() => {
         if (volume < 1.0) {
-            volume += 0.05;
+            volume += 0.01;
             if (volume > 1.0) volume = 1.0;
             alarmSound.volume = volume;
         } else {
