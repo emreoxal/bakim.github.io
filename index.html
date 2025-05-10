@@ -207,37 +207,39 @@
         <span>⏰</span>
         <span id="endTimeText"></span>
     </div>
-    <div class="controls">
-        <button class="small-button" onclick="adjustTime(-300)">-5</button>
-        <button class="medium-button" onclick="setTime(7200)">2:00</button>
-        <button class="large-button" id="startPauseButton" style="background-color: #4CAF50;">BAŞLAT</button>
-        <button class="medium-button" onclick="setTime(1800)">0:30</button>
-        <button class="small-button" onclick="adjustTime(300)">+5</button>
-    </div>
+<div class="controls">
+    <button class="small-button" onclick="adjustTime(-60)">-1</button> <!-- Yeni eklendi -->
+    <button class="small-button" onclick="adjustTime(-300)">-5</button>
+    <button class="medium-button" onclick="setTime(7200)">2:00</button>
+    <button class="large-button" id="startPauseButton" style="background-color: #4CAF50;">BAŞLAT</button>
+    <button class="medium-button" onclick="setTime(1800)">0:30</button>
+    <button class="small-button" onclick="adjustTime(300)">+5</button>
+    <button class="small-button" onclick="adjustTime(60)">+1</button> <!-- Yeni eklendi -->
+</div>
     <div class="divider"></div>
     <div class="square-buttons">
         <button class="square-button" onclick="setActiveButton(this)">
-            <img src="images/sol.png" alt="Sol" width="48" height="48">
+            <img src="sol.png" alt="Sol" width="48" height="48">
         </button>
         <button class="square-button" onclick="setActiveButton(this)">
-            <img src="images/sirt.png" alt="Sırt" width="48" height="48">
+            <img src="sirt.png" alt="Sırt" width="48" height="48">
         </button>
         <button class="square-button" onclick="setActiveButton(this)">
-            <img src="images/sag.png" alt="Sağ" width="48" height="48">
+            <img src="sag.png" alt="Sağ" width="48" height="48">
         </button>
     </div>
     <div class="divider"></div>
     <div class="new-buttons">
         <button class="new-button" id="agizButton" onclick="handleAgizButton()">
-            <img src="images/agiz.png" alt="Ağız" width="32" height="32">
+            <img src="agiz.png" alt="Ağız" width="32" height="32">
             <div class="counter" id="agizCounter">0</div>
         </button>
         <button class="new-button" id="ilacButton" onclick="handleIlacButton()">
-            <img src="images/ilac.png" alt="İlaç" width="32" height="32">
+            <img src="ilac.png" alt="İlaç" width="32" height="32">
             <div class="counter" id="ilacCounter">0</div>
         </button>
         <button class="new-button" id="trainButton" onclick="handleTrainButton()">
-            <img src="images/train.png" alt="Eğitim" width="32" height="32">
+            <img src="train.png" alt="Eğitim" width="32" height="32">
             <div class="counter" id="trainCounter">0</div>
         </button>
     </div>
@@ -270,7 +272,7 @@
     <button class="add-row-button" onclick="clearTable()">Verileri Sil</button>
 
     <!-- Alarm sesi için audio elementi -->
-    <audio id="alarmSound" src="images/alarm.mp3" loop></audio>
+    <audio id="alarmSound" src="alarm.mp3" loop></audio>
 
     <!-- SheetJS kütüphanesi -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
@@ -324,18 +326,19 @@
             }, 1000);
         }
 
-        function toggleTimer() {
-            if (isRunning) {
-                clearInterval(countdown);
-                document.getElementById('startPauseButton').textContent = 'BAŞLAT';
-                document.getElementById('startPauseButton').style.backgroundColor = '#4CAF50';
-            } else {
-                startTimer();
-                document.getElementById('startPauseButton').textContent = 'DURAKLAT';
-                document.getElementById('startPauseButton').style.backgroundColor = 'gray';
-            }
-            isRunning = !isRunning;
-        }
+function toggleTimer() {
+    if (isRunning) {
+        clearInterval(countdown);
+        document.getElementById('startPauseButton').textContent = 'BAŞLAT';
+        document.getElementById('startPauseButton').style.backgroundColor = '#4CAF50';
+        isRunning = false;
+    } else {
+        startTimer();
+        document.getElementById('startPauseButton').textContent = 'DURAKLAT';
+        document.getElementById('startPauseButton').style.backgroundColor = 'gray';
+        isRunning = true;
+    }
+}
 
         function displayTimeLeft(seconds) {
             const hours = Math.floor(seconds / 3600);
@@ -388,14 +391,15 @@
             setTimeout(flashBackground, 500);
         }
 
-        function stopAlarm() {
-            document.getElementById('alarmSound').pause();
-            document.getElementById('alarmSound').currentTime = 0;
-            document.getElementById('startPauseButton').textContent = 'BAŞLAT';
-            document.getElementById('startPauseButton').style.backgroundColor = '#4CAF50';
-            flashing = false;
-            document.body.style.backgroundColor = '#282c36';
-        }
+function stopAlarm() {
+    document.getElementById('alarmSound').pause();
+    document.getElementById('alarmSound').currentTime = 0;
+    document.getElementById('startPauseButton').textContent = 'BAŞLAT';
+    document.getElementById('startPauseButton').style.backgroundColor = '#4CAF50';
+    flashing = false;
+    document.body.style.backgroundColor = '#282c36';
+    isRunning = false; // Ekstra güvenlik için
+}
 
         function setActiveButton(button) {
             // Tüm butonların renklerini sıfırla
