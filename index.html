@@ -1,202 +1,212 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geri Sayım ve Kayıt Defteri</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background-color: #282c36;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-        .clock-container {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            margin-bottom: 20px;
-        }
-        .clock {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            border-radius: 50%;
-            background: conic-gradient(red 0deg, white 0deg);
-            border: 5px solid white;
-            transition: background 0.5s ease-in-out;
-        }
-        .timer {
-            font-size: 3rem;
-            margin: 20px;
-        }
-        .end-time {
-            font-size: 1.2rem;
-            margin-top: -10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-        .controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        button {
-            padding: 15px 25px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            border-radius: 10px;
-            border: none;
-            transition: background-color 0.3s, color 0.3s;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Geri Sayım ve Kayıt Defteri</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background-color: #282c36;
+        color: white;
+        text-align: center;
+        padding: 20px;
+    }
+    .clock-container {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        margin-bottom: 20px;
+    }
+    .clock {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        border-radius: 50%;
+        background: conic-gradient(red 0deg, white 0deg);
+        border: 5px solid white;
+        transition: background 0.5s ease-in-out;
+    }
+    .timer {
+        font-size: 3rem;
+        margin: 20px;
+    }
+    .end-time {
+        font-size: 1.2rem;
+        margin-top: -10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+    }
+    .controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    button {
+        padding: 15px 25px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        border-radius: 10px;
+        border: none;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    .large-button {
+        font-size: 1.5rem;
+        padding: 20px 35px;
+        font-weight: bold;
+    }
+    .medium-button {
+        font-size: 1.2rem;
+        padding: 15px 25px;
+    }
+    .small-button {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+    .square-buttons {
+        display: flex;
+        gap: 20px;
+        margin-top: 15px;
+    }
+    .square-button {
+        width: 80px;
+        height: 80px;
+        font-size: 1.2rem;
+        border-radius: 10px;
+        background-color: white;
+        color: #282c36;
+        transition: background-color 0.3s, color 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .square-button.active {
+        background-color: red;
+        color: white;
+    }
+    .square-button.previous {
+        background-color: orange;
+        color: white;
+    }
+    .alarm-button {
+        display: none;
+        background: red;
+        color: white;
+    }
+    .table-container {
+        width: 100%;
+        max-width: 1200px;
+        margin-top: 40px;
+        overflow-x: auto;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #fff;
+        color: #000;
+    }
+    th, td {
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+    th {
+        background-color: #f2f2f2;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+    input[type="text"], input[type="number"] {
+        width: 80%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+    input[type="checkbox"]:checked {
+        background-color: green;
+    }
+    .add-row-button {
+        margin-top: 20px;
+    }
+    .divider {
+        width: 100%;
+        height: 2px;
+        background-color: white;
+        margin: 20px 0;
+    }
+    /* Yeni butonlar 3x3 grid */
+    .new-buttons {
+        display: grid;
+        grid-template-columns: repeat(3, 80px);
+        grid-template-rows: repeat(3, 50px);
+        gap: 10px;
+        justify-content: center;
+        margin-top: 15px;
+    }
+    .new-button {
+        width: 80px;
+        height: 50px;
+        font-size: 1rem;
+        border-radius: 10px;
+        background-color: white;
+        color: #282c36;
+        transition: background-color 0.3s, color 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        user-select: none;
+        font-weight: bold;
+        padding: 0;
+    }
+    .new-button.active {
+        background-color: red !important;
+        color: white !important;
+    }
+    .new-button.all-white {
+        background-color: white !important;
+        color: #282c36 !important;
+    }
+    @media (max-width: 600px) {
         .large-button {
-            font-size: 1.5rem;
-            padding: 20px 35px;
-            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 15px 25px;
         }
         .medium-button {
-            font-size: 1.2rem;
-            padding: 15px 25px;
-        }
-        .small-button {
             font-size: 1rem;
             padding: 10px 20px;
         }
-        .square-buttons {
-            display: flex;
-            gap: 20px;
-            margin-top: 15px;
+        .small-button {
+            font-size: 0.9rem;
+            padding: 8px 16px;
         }
         .square-button {
-            width: 80px;
-            height: 80px;
-            font-size: 1.2rem;
-            border-radius: 10px;
-            background-color: white;
-            color: #282c36;
-            transition: background-color 0.3s, color 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .square-button.active {
-            background-color: red;
-            color: white;
-        }
-        .square-button.previous {
-            background-color: orange;
-            color: white;
-        }
-        .alarm-button {
-            display: none;
-            background: red;
-            color: white;
-        }
-        .table-container {
-            width: 100%;
-            max-width: 1200px;
-            margin-top: 40px;
-            overflow-x: auto;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #fff;
-            color: #000;
-        }
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-        th {
-            background-color: #f2f2f2;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-        input[type="text"], input[type="number"] {
-            width: 80%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-        input[type="checkbox"]:checked {
-            background-color: green;
-        }
-        .add-row-button {
-            margin-top: 20px;
-        }
-        .divider {
-            width: 100%;
-            height: 2px;
-            background-color: white;
-            margin: 20px 0;
-        }
-        .new-buttons {
-            display: flex;
-            gap: 20px;
-            margin-top: 15px;
+            width: 60px;
+            height: 60px;
+            font-size: 1rem;
         }
         .new-button {
-            width: 80px;
-            height: 80px;
-            font-size: 1.2rem;
-            border-radius: 10px;
-            background-color: red;
-            color: white;
-            transition: background-color 0.3s, color 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            width: 60px;
+            height: 40px;
+            font-size: 0.9rem;
         }
-        .new-button .counter {
-            font-size: 1rem;
-            color: black; /* Sayaçlar siyah renkli */
-            margin-top: 5px;
-        }
-        @media (max-width: 600px) {
-            .large-button {
-                font-size: 1.2rem;
-                padding: 15px 25px;
-            }
-            .medium-button {
-                font-size: 1rem;
-                padding: 10px 20px;
-            }
-            .small-button {
-                font-size: 0.9rem;
-                padding: 8px 16px;
-            }
-            .square-button {
-                width: 60px;
-                height: 60px;
-                font-size: 1rem;
-            }
-            .new-button {
-                width: 60px;
-                height: 60px;
-                font-size: 1rem;
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
     <div class="clock-container">
@@ -218,30 +228,29 @@
 </div>
     <div class="divider"></div>
     <div class="square-buttons">
-        <button class="square-button" onclick="setActiveButton(this)">
-            <img src="images/sol.png" alt="Sol" width="48" height="48">
+        <button class="square-button" id="btnSol" onclick="setActiveButton(this)">
+            <img src="images/sol.png" alt="Sol" width="48" height="48" />
         </button>
-        <button class="square-button" onclick="setActiveButton(this)">
-            <img src="images/sirt.png" alt="Sırt" width="48" height="48">
+        <button class="square-button" id="btnSirt" onclick="setActiveButton(this)">
+            <img src="images/sirt.png" alt="Sırt" width="48" height="48" />
         </button>
-        <button class="square-button" onclick="setActiveButton(this)">
-            <img src="images/sag.png" alt="Sağ" width="48" height="48">
+        <button class="square-button" id="btnSag" onclick="setActiveButton(this)">
+            <img src="images/sag.png" alt="Sağ" width="48" height="48" />
         </button>
     </div>
     <div class="divider"></div>
-    <div class="new-buttons">
-        <button class="new-button" id="agizButton" onclick="handleAgizButton()">
-            <img src="images/agiz.png" alt="Ağız" width="32" height="32">
-            <div class="counter" id="agizCounter">0</div>
-        </button>
-        <button class="new-button" id="ilacButton" onclick="handleIlacButton()">
-            <img src="images/ilac.png" alt="İlaç" width="32" height="32">
-            <div class="counter" id="ilacCounter">0</div>
-        </button>
-        <button class="new-button" id="trainButton" onclick="handleTrainButton()">
-            <img src="images/train.png" alt="Eğitim" width="32" height="32">
-            <div class="counter" id="trainCounter">0</div>
-        </button>
+    <div class="new-buttons" id="newButtonsContainer">
+        <button class="new-button" data-target="07:00" data-trigger="sirt">04:00</button>
+        <button class="new-button" data-target="09:30" data-trigger="sag">07:00</button>
+        <button class="new-button" data-target="12:00" data-trigger="sol">09:30</button>
+
+        <button class="new-button" data-target="15:00" data-trigger="sirt">12:00</button>
+        <button class="new-button" data-target="17:30" data-trigger="sag">15:00</button>
+        <button class="new-button" data-target="20:00" data-trigger="sol">17:30</button>
+
+        <button class="new-button" data-target="23:00" data-trigger="sirt">20:00</button>
+        <button class="new-button" data-target="01:30" data-trigger="sag">23:00</button>
+        <button class="new-button" data-target="04:00" data-trigger="sol">01:30</button>
     </div>
     <div class="divider"></div>
     <div class="table-container">
@@ -277,539 +286,308 @@
     <!-- SheetJS kütüphanesi -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 
-    <script>
-        // Zamanlayıcı ve Diğer İşlevler
-        let countdown;
-        let timeLeft = 7200;
-        let isRunning = false;
-        let flashing = false;
-        let totalTime = 7200;
-        let lastClickedButton = null;
-        let previousClickedButton = null;
+<script>
+    let countdown;
+    let timeLeft = 7200;
+    let isRunning = false;
+    let flashing = false;
+    let totalTime = 7200;
+    let lastClickedButton = null;
+    let previousClickedButton = null;
 
-        // Yeni butonlar için sayaçlar
-        let agizCounter = 0;
-        let ilacCounter = 0;
-        let trainCounter = 0;
+    const btnSol = document.getElementById("btnSol");
+    const btnSirt = document.getElementById("btnSirt");
+    const btnSag = document.getElementById("btnSag");
 
-        // Yeni butonlar için renk durumları
-        let agizColorState = 0;
-        let ilacColorState = 0;
-        let trainColorState = 0;
-
-        // Bitiş zamanını güncelle
-        function updateEndTime() {
-            const now = Date.now();
-            const endTime = new Date(now + timeLeft * 1000);
-            const hours = String(endTime.getHours()).padStart(2, '0');
-            const minutes = String(endTime.getMinutes()).padStart(2, '0');
-            document.getElementById("endTimeText").textContent = `${hours}:${minutes}`;
-        }
-
-        function updateClock(seconds) {
-            const percentage = ((totalTime - seconds) / totalTime) * 360;
-            document.getElementById('clock').style.background = `conic-gradient(red ${percentage}deg, white ${percentage}deg)`;
-        }
-
-        function startTimer() {
-            const then = Date.now() + timeLeft * 1000;
-            updateEndTime();
-            countdown = setInterval(() => {
-                timeLeft = Math.round((then - Date.now()) / 1000);
-                if (timeLeft < 0) {
-                    clearInterval(countdown);
-                    triggerAlarm();
-                    return;
-                }
-                displayTimeLeft(timeLeft);
-                updateClock(timeLeft);
-            }, 1000);
-        }
-
-function toggleTimer() {
-    if (isRunning) {
-        clearInterval(countdown);
-        document.getElementById('startPauseButton').textContent = 'BAŞLAT';
-        document.getElementById('startPauseButton').style.backgroundColor = '#4CAF50';
-        isRunning = false;
-    } else {
-        startTimer();
-        document.getElementById('startPauseButton').textContent = 'DURAKLAT';
-        document.getElementById('startPauseButton').style.backgroundColor = 'gray';
-        isRunning = true;
+    function updateEndTime() {
+        const now = Date.now();
+        const endTime = new Date(now + timeLeft * 1000);
+        const hours = String(endTime.getHours()).padStart(2, '0');
+        const minutes = String(endTime.getMinutes()).padStart(2, '0');
+        document.getElementById("endTimeText").textContent = `${hours}:${minutes}`;
     }
-}
 
-        function displayTimeLeft(seconds) {
-            const hours = Math.floor(seconds / 3600);
-            const minutes = Math.floor((seconds % 3600) / 60);
-            const secs = seconds % 60;
-            document.getElementById('timer').textContent =
-                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-        }
+    function updateClock(seconds) {
+        const percentage = ((totalTime - seconds) / totalTime) * 360;
+        document.getElementById('clock').style.background = `conic-gradient(red ${percentage}deg, white ${percentage}deg)`;
+    }
 
-        function adjustTime(amount) {
-            const newTime = totalTime + amount;
-            if (newTime < 0) return;
-            totalTime = newTime;
-            timeLeft = totalTime;
+    function startTimer() {
+        const then = Date.now() + timeLeft * 1000;
+        updateEndTime();
+        countdown = setInterval(() => {
+            timeLeft = Math.round((then - Date.now()) / 1000);
+            if (timeLeft < 0) {
+                clearInterval(countdown);
+                triggerAlarm();
+                return;
+            }
             displayTimeLeft(timeLeft);
             updateClock(timeLeft);
-            if (isRunning) {
-                clearInterval(countdown);
-                startTimer();
-            } else {
-                updateEndTime();
-            }
-        }
+        }, 1000);
+    }
 
-        function setTime(seconds) {
-            if (seconds < 0) return;
-            totalTime = seconds;
-            timeLeft = seconds;
-            displayTimeLeft(timeLeft);
-            updateClock(timeLeft);
-            if (isRunning) {
-                clearInterval(countdown);
-                startTimer();
-            } else {
-                updateEndTime();
-            }
-        }
-
-function triggerAlarm() {
-    const alarmSound = document.getElementById('alarmSound');
-    alarmSound.volume = 0.1; // Ses seviyesini düşük başlat (0.1 = %10)
-    alarmSound.play();
-    
-    document.getElementById('startPauseButton').textContent = 'SUSTUR';
-    document.getElementById('startPauseButton').style.backgroundColor = 'red';
-    flashing = true;
-    flashBackground();
-    
-    // Ses seviyesini kademeli olarak artır
-    let volume = 0.1;
-    const volumeIncreaseInterval = setInterval(() => {
-        if (volume < 1.0) {
-            volume += 0.01;
-            if (volume > 1.0) volume = 1.0;
-            alarmSound.volume = volume;
+    function toggleTimer() {
+        if (isRunning) {
+            clearInterval(countdown);
+            document.getElementById('startPauseButton').textContent = 'BAŞLAT';
+            document.getElementById('startPauseButton').style.backgroundColor = '#4CAF50';
+            isRunning = false;
         } else {
-            clearInterval(volumeIncreaseInterval);
+            startTimer();
+            document.getElementById('startPauseButton').textContent = 'DURAKLAT';
+            document.getElementById('startPauseButton').style.backgroundColor = 'gray';
+            isRunning = true;
         }
-    }, 1500); // Her 500ms'de bir sesi %5 artır
-}
+    }
 
-        function flashBackground() {
-            if (!flashing) return;
-            document.body.style.backgroundColor = document.body.style.backgroundColor === 'red' ? '#282c36' : 'red';
-            setTimeout(flashBackground, 500);
-        }
+    function displayTimeLeft(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        document.getElementById('timer').textContent =
+            `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
 
-function stopAlarm() {
-    const alarmSound = document.getElementById('alarmSound');
-    alarmSound.pause();
-    alarmSound.currentTime = 0;
-    alarmSound.volume = 1.0; // Ses seviyesini sıfırla
-    
-    document.getElementById('startPauseButton').textContent = 'BAŞLAT';
-    document.getElementById('startPauseButton').style.backgroundColor = '#4CAF50';
-    flashing = false;
-    document.body.style.backgroundColor = '#282c36';
-    isRunning = false;
-}
-
-        function setActiveButton(button) {
-            // Tüm butonların renklerini sıfırla
-            document.querySelectorAll('.square-button').forEach(btn => {
-                btn.classList.remove('active', 'previous');
-            });
-
-            // Yeni tıklanan butonu kırmızı yap
-            button.classList.add('active');
-
-            // Bir önceki butonu turuncu yap
-            if (lastClickedButton && lastClickedButton !== button) {
-                lastClickedButton.classList.add('previous');
-            }
-
-            // Son tıklanan butonu güncelle
-            lastClickedButton = button;
-        }
-
-        // Başlat/Duraklat butonuna tıklama olayını ekle
-        document.getElementById('startPauseButton').addEventListener('click', function () {
-            if (this.textContent === 'SUSTUR') {
-                stopAlarm();
-            } else {
-                toggleTimer();
-            }
-        });
-
-        // Tablo İşlemleri
-        function addRow() {
-            const tableBody = document.querySelector("#dataTable tbody");
-            const newRow = document.createElement("tr");
-
-            // Tarih Sütunu
-            const dateCell = document.createElement("td");
-            const dateInput = document.createElement("input");
-            dateInput.type = "text";
-            dateInput.placeholder = "Tarih";
-            const now = new Date();
-            const day = String(now.getDate()).padStart(2, '0');
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const year = String(now.getFullYear()).slice(-2); // Yılın son iki hanesi
-            const days = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
-            const dayName = days[now.getDay()];
-            dateInput.value = `${day}.${month}.${year} ${dayName}`;
-            dateCell.appendChild(dateInput);
-            newRow.appendChild(dateCell);
-
-            // Mama Sütunu
-            const mamaCell = document.createElement("td");
-            const mamaInput = document.createElement("input");
-            mamaInput.type = "number";
-            mamaInput.placeholder = "ml";
-            mamaCell.appendChild(mamaInput);
-            newRow.appendChild(mamaCell);
-
-            // Su Sütunu
-            const suCell = document.createElement("td");
-            const suInput = document.createElement("input");
-            suInput.type = "number";
-            suInput.placeholder = "ml";
-            suCell.appendChild(suInput);
-            newRow.appendChild(suCell);
-
-            // Tansiyon 1 Sütunu
-            const tansiyon1Cell = document.createElement("td");
-            const tansiyon1Input = document.createElement("input");
-            tansiyon1Input.type = "text";
-            tansiyon1Input.placeholder = "Örnek: 10 8";
-            tansiyon1Input.pattern = "\\d+\\s\\d+"; // Sayı-boşluk-sayı formatı
-            tansiyon1Input.title = "Lütfen '10 8' gibi bir format kullanın.";
-            tansiyon1Cell.appendChild(tansiyon1Input);
-            newRow.appendChild(tansiyon1Cell);
-
-            // Tansiyon 2 Sütunu
-            const tansiyon2Cell = document.createElement("td");
-            const tansiyon2Input = document.createElement("input");
-            tansiyon2Input.type = "text";
-            tansiyon2Input.placeholder = "Örnek: 10 8";
-            tansiyon2Input.pattern = "\\d+\\s\\d+"; // Sayı-boşluk-sayı formatı
-            tansiyon2Input.title = "Lütfen '10 8' gibi bir format kullanın.";
-            tansiyon2Cell.appendChild(tansiyon2Input);
-            newRow.appendChild(tansiyon2Cell);
-
-            // Nabız 1 Sütunu
-            const nabiz1Cell = document.createElement("td");
-            const nabiz1Input = document.createElement("input");
-            nabiz1Input.type = "number";
-            nabiz1Input.placeholder = "Nabız 1";
-            nabiz1Cell.appendChild(nabiz1Input);
-            newRow.appendChild(nabiz1Cell);
-
-            // Nabız 2 Sütunu
-            const nabiz2Cell = document.createElement("td");
-            const nabiz2Input = document.createElement("input");
-            nabiz2Input.type = "number";
-            nabiz2Input.placeholder = "Nabız 2";
-            nabiz2Cell.appendChild(nabiz2Input);
-            newRow.appendChild(nabiz2Cell);
-
-            // O2 1 Sütunu
-            const o21Cell = document.createElement("td");
-            const o21Input = document.createElement("input");
-            o21Input.type = "number";
-            o21Input.placeholder = "O2 1";
-            o21Cell.appendChild(o21Input);
-            newRow.appendChild(o21Cell);
-
-            // O2 2 Sütunu
-            const o22Cell = document.createElement("td");
-            const o22Input = document.createElement("input");
-            o22Input.type = "number";
-            o22Input.placeholder = "O2 2";
-            o22Cell.appendChild(o22Input);
-            newRow.appendChild(o22Cell);
-
-            // Defekasyon Sütunu
-            const defekasyonCell = document.createElement("td");
-            const defekasyonInput = document.createElement("input");
-            defekasyonInput.type = "checkbox";
-            defekasyonCell.appendChild(defekasyonInput);
-            newRow.appendChild(defekasyonCell);
-
-            // Notlar Sütunu
-            const notlarCell = document.createElement("td");
-            const notlarInput = document.createElement("input");
-            notlarInput.type = "text";
-            notlarInput.placeholder = "Notlar";
-            notlarCell.appendChild(notlarInput);
-            newRow.appendChild(notlarCell);
-
-            // Satırı tabloya ekle
-            tableBody.appendChild(newRow);
-
-            // Verileri localStorage'a kaydet
-            saveTableData();
-        }
-
-        // Satır silme işlevi
-        function deleteRow() {
-            const tableBody = document.querySelector("#dataTable tbody");
-            const rows = tableBody.querySelectorAll("tr");
-            if (rows.length > 0) {
-                tableBody.removeChild(rows[rows.length - 1]);
-                saveTableData();
-            }
-        }
-
-        // Tablo verilerini localStorage'a kaydet
-        function saveTableData() {
-            const table = document.getElementById("dataTable");
-            const rows = table.querySelectorAll("tbody tr");
-            const data = [];
-
-            rows.forEach(row => {
-                const rowData = {
-                    tarih: row.cells[0].querySelector("input").value,
-                    mama: row.cells[1].querySelector("input").value,
-                    su: row.cells[2].querySelector("input").value,
-                    tansiyon1: row.cells[3].querySelector("input").value,
-                    tansiyon2: row.cells[4].querySelector("input").value,
-                    nabiz1: row.cells[5].querySelector("input").value,
-                    nabiz2: row.cells[6].querySelector("input").value,
-                    o21: row.cells[7].querySelector("input").value,
-                    o22: row.cells[8].querySelector("input").value,
-                    defekasyon: row.cells[9].querySelector("input").checked,
-                    notlar: row.cells[10].querySelector("input").value
-                };
-                data.push(rowData);
-            });
-
-            localStorage.setItem("tableData", JSON.stringify(data));
-        }
-
-        // Tablo verilerini localStorage'dan yükle
-        function loadTableData() {
-            const data = JSON.parse(localStorage.getItem("tableData")) || [];
-            const tableBody = document.querySelector("#dataTable tbody");
-
-            data.forEach(rowData => {
-                const newRow = document.createElement("tr");
-
-                // Tarih Sütunu
-                const dateCell = document.createElement("td");
-                const dateInput = document.createElement("input");
-                dateInput.type = "text";
-                dateInput.value = rowData.tarih;
-                dateCell.appendChild(dateInput);
-                newRow.appendChild(dateCell);
-
-                // Mama Sütunu
-                const mamaCell = document.createElement("td");
-                const mamaInput = document.createElement("input");
-                mamaInput.type = "number";
-                mamaInput.value = rowData.mama;
-                mamaCell.appendChild(mamaInput);
-                newRow.appendChild(mamaCell);
-
-                // Su Sütunu
-                const suCell = document.createElement("td");
-                const suInput = document.createElement("input");
-                suInput.type = "number";
-                suInput.value = rowData.su;
-                suCell.appendChild(suInput);
-                newRow.appendChild(suCell);
-
-                // Tansiyon 1 Sütunu
-                const tansiyon1Cell = document.createElement("td");
-                const tansiyon1Input = document.createElement("input");
-                tansiyon1Input.type = "text";
-                tansiyon1Input.value = rowData.tansiyon1;
-                tansiyon1Cell.appendChild(tansiyon1Input);
-                newRow.appendChild(tansiyon1Cell);
-
-                // Tansiyon 2 Sütunu
-                const tansiyon2Cell = document.createElement("td");
-                const tansiyon2Input = document.createElement("input");
-                tansiyon2Input.type = "text";
-                tansiyon2Input.value = rowData.tansiyon2;
-                tansiyon2Cell.appendChild(tansiyon2Input);
-                newRow.appendChild(tansiyon2Cell);
-
-                // Nabız 1 Sütunu
-                const nabiz1Cell = document.createElement("td");
-                const nabiz1Input = document.createElement("input");
-                nabiz1Input.type = "number";
-                nabiz1Input.value = rowData.nabiz1;
-                nabiz1Cell.appendChild(nabiz1Input);
-                newRow.appendChild(nabiz1Cell);
-
-                // Nabız 2 Sütunu
-                const nabiz2Cell = document.createElement("td");
-                const nabiz2Input = document.createElement("input");
-                nabiz2Input.type = "number";
-                nabiz2Input.value = rowData.nabiz2;
-                nabiz2Cell.appendChild(nabiz2Input);
-                newRow.appendChild(nabiz2Cell);
-
-                // O2 1 Sütunu
-                const o21Cell = document.createElement("td");
-                const o21Input = document.createElement("input");
-                o21Input.type = "number";
-                o21Input.value = rowData.o21;
-                o21Cell.appendChild(o21Input);
-                newRow.appendChild(o21Cell);
-
-                // O2 2 Sütunu
-                const o22Cell = document.createElement("td");
-                const o22Input = document.createElement("input");
-                o22Input.type = "number";
-                o22Input.value = rowData.o22;
-                o22Cell.appendChild(o22Input);
-                newRow.appendChild(o22Cell);
-
-                // Defekasyon Sütunu
-                const defekasyonCell = document.createElement("td");
-                const defekasyonInput = document.createElement("input");
-                defekasyonInput.type = "checkbox";
-                defekasyonInput.checked = rowData.defekasyon;
-                defekasyonCell.appendChild(defekasyonInput);
-                newRow.appendChild(defekasyonCell);
-
-                // Notlar Sütunu
-                const notlarCell = document.createElement("td");
-                const notlarInput = document.createElement("input");
-                notlarInput.type = "text";
-                notlarInput.value = rowData.notlar;
-                notlarCell.appendChild(notlarInput);
-                newRow.appendChild(notlarCell);
-
-                // Satırı tabloya ekle
-                tableBody.appendChild(newRow);
-            });
-        }
-
-        // Tablo verilerini Excel olarak indir
-        function exportToExcel() {
-            const table = document.getElementById("dataTable");
-            const rows = table.querySelectorAll("tbody tr");
-            const data = [];
-
-            // Başlıkları ekle
-            const headers = [];
-            table.querySelectorAll("thead th").forEach(header => {
-                headers.push(header.textContent.replace(/<br>/g, ' ')); // <br> etiketlerini boşlukla değiştir
-            });
-            data.push(headers);
-
-            // Satırları ekle
-            rows.forEach(row => {
-                const rowData = [];
-                row.querySelectorAll("td input").forEach(input => {
-                    if (input.type === "checkbox") {
-                        rowData.push(input.checked ? "Evet" : "Hayır");
-                    } else {
-                        rowData.push(input.value);
-                    }
-                });
-                data.push(rowData);
-            });
-
-            // Excel dosyası oluştur
-            const worksheet = XLSX.utils.aoa_to_sheet(data);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Veriler");
-
-            // Excel dosyasını indir
-            XLSX.writeFile(workbook, "veriler.xlsx");
-        }
-
-        // Tablo verilerini sil
-        function clearTable() {
-            if (confirm("Tüm veriler silinecek. Emin misiniz?")) {
-                localStorage.removeItem("tableData");
-                document.querySelector("#dataTable tbody").innerHTML = "";
-            }
-        }
-
-        // Yeni butonlar için işlevler
-        function handleAgizButton() {
-            if (agizCounter < 2) {
-                agizCounter++;
-                document.getElementById("agizCounter").textContent = agizCounter;
-
-                if (agizCounter === 1) {
-                    document.getElementById("agizButton").style.backgroundColor = "orange";
-                } else if (agizCounter === 2) {
-                    document.getElementById("agizButton").style.backgroundColor = "#4CAF50";
-                }
-            }
-        }
-
-        function handleIlacButton() {
-            if (ilacCounter < 3) {
-                ilacCounter++;
-                document.getElementById("ilacCounter").textContent = ilacCounter;
-
-                if (ilacCounter === 1) {
-                    document.getElementById("ilacButton").style.backgroundColor = "orange";
-                } else if (ilacCounter === 2) {
-                    document.getElementById("ilacButton").style.backgroundColor = "yellow";
-                } else if (ilacCounter === 3) {
-                    document.getElementById("ilacButton").style.backgroundColor = "#4CAF50";
-                }
-            }
-        }
-
-        function handleTrainButton() {
-            if (trainCounter < 2) {
-                trainCounter++;
-                document.getElementById("trainCounter").textContent = trainCounter;
-
-                if (trainCounter === 1) {
-                    document.getElementById("trainButton").style.backgroundColor = "orange";
-                } else if (trainCounter === 2) {
-                    document.getElementById("trainButton").style.backgroundColor = "#4CAF50";
-                }
-            }
-        }
-
-        // Her gece saat 3:00'de butonları sıfırla
-        function resetButtonsAt3AM() {
-            const now = new Date();
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-
-            if (hours === 3 && minutes === 0) {
-                agizCounter = 0;
-                ilacCounter = 0;
-                trainCounter = 0;
-
-                document.getElementById("agizCounter").textContent = "0";
-                document.getElementById("ilacCounter").textContent = "0";
-                document.getElementById("trainCounter").textContent = "0";
-
-                document.getElementById("agizButton").style.backgroundColor = "red";
-                document.getElementById("ilacButton").style.backgroundColor = "red";
-                document.getElementById("trainButton").style.backgroundColor = "red";
-            }
-        }
-
-        // Sayfa yüklendiğinde zamanı, saati ve tablo verilerini yükle
+    function adjustTime(amount) {
+        const newTime = totalTime + amount;
+        if (newTime < 0) return;
+        totalTime = newTime;
+        timeLeft = totalTime;
         displayTimeLeft(timeLeft);
         updateClock(timeLeft);
-        updateEndTime();
-        loadTableData();
+        if (isRunning) {
+            clearInterval(countdown);
+            startTimer();
+        } else {
+            updateEndTime();
+        }
+    }
 
-        // Tablo verilerini her değişiklikte kaydet
-        document.querySelector("#dataTable tbody").addEventListener("input", saveTableData);
+    function setTime(seconds) {
+        if (seconds < 0) return;
+        totalTime = seconds;
+        timeLeft = seconds;
+        displayTimeLeft(timeLeft);
+        updateClock(timeLeft);
+        if (isRunning) {
+            clearInterval(countdown);
+            startTimer();
+        } else {
+            updateEndTime();
+        }
+    }
 
-        // Her gece saat 3:00'de butonları sıfırla
-        setInterval(resetButtonsAt3AM, 60000); // Her dakika kontrol et
-    </script>
+    function triggerAlarm() {
+        const alarmSound = document.getElementById('alarmSound');
+        alarmSound.volume = 0.1;
+        alarmSound.play();
+
+        document.getElementById('startPauseButton').textContent = 'SUSTUR';
+        document.getElementById('startPauseButton').style.backgroundColor = 'red';
+        flashing = true;
+        flashBackground();
+
+        let volume = 0.1;
+        const volumeIncreaseInterval = setInterval(() => {
+            if (volume < 1.0) {
+                volume += 0.01;
+                if (volume > 1.0) volume = 1.0;
+                alarmSound.volume = volume;
+            } else {
+                clearInterval(volumeIncreaseInterval);
+            }
+        }, 1500);
+    }
+
+    function flashBackground() {
+        if (!flashing) return;
+        document.body.style.backgroundColor = document.body.style.backgroundColor === 'red' ? '#282c36' : 'red';
+        setTimeout(flashBackground, 500);
+    }
+
+    function stopAlarm() {
+        const alarmSound = document.getElementById('alarmSound');
+        alarmSound.pause();
+        alarmSound.currentTime = 0;
+        alarmSound.volume = 1.0;
+
+        document.getElementById('startPauseButton').textContent = 'BAŞLAT';
+        document.getElementById('startPauseButton').style.backgroundColor = '#4CAF50';
+        flashing = false;
+        document.body.style.backgroundColor = '#282c36';
+        isRunning = false;
+    }
+
+    function setActiveButton(button) {
+        // Sadece kendi square-button grubunda işlem yapalım
+        document.querySelectorAll('.square-button').forEach(btn => {
+            btn.classList.remove('active', 'previous');
+        });
+
+        button.classList.add('active');
+        if (lastClickedButton && lastClickedButton !== button) {
+            lastClickedButton.classList.add('previous');
+        }
+        lastClickedButton = button;
+    }
+
+    document.getElementById('startPauseButton').addEventListener('click', function () {
+        if (this.textContent === 'SUSTUR') {
+            stopAlarm();
+        } else {
+            toggleTimer();
+        }
+    });
+
+    // Yeni butonların tetikleyicileri ve mantığı:
+
+    const newButtons = document.querySelectorAll('.new-button');
+    // Butonlar ve hedef saatleri, tetikleyiciler (sol/sırt/sağ) sırası için map
+    // Yeni butonlar üzerindeki yazılar: soldan sağa, satır satır:
+    // 1.satır: 04:00, 07:00, 09:30
+    // 2.satır: 12:00, 15:00, 17:30
+    // 3.satır: 20:00, 23:00, 01:30
+    //
+    // Tetikleyici sırası:
+    // Satır 1: 04:00 (sol), 07:00 (sırt), 09:30 (sağ)
+    // Satır 2: 12:00 (sol), 15:00 (sırt), 17:30 (sağ)
+    // Satır 3: 20:00 (sol), 23:00 (sırt), 01:30 (sağ)
+
+    // Fonksiyon: verilen hedef saate göre saniye cinsinden farkı hesapla (şu andan itibaren)
+    function getSecondsUntil(targetTimeStr) {
+        // targetTimeStr format: "HH:MM"
+        const now = new Date();
+        const [th, tm] = targetTimeStr.split(':').map(Number);
+        let target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), th, tm, 0);
+        if (target <= now) {
+            // Eğer hedef saat geçmişse, bir sonraki güne geçir
+            target.setDate(target.getDate() + 1);
+        }
+        return Math.round((target - now) / 1000);
+    }
+
+    // Fonksiyon: "sol", "sırt", "sağ" stringini ilgili butona tıklamayı simüle et
+    function triggerPhysicalButton(side) {
+        // side: "sol", "sırt", "sağ"
+        // mevcut square-buttonları tetikleme
+        if (side === "sol") btnSol.click();
+        else if (side === "sirt") btnSirt.click();
+        else if (side === "sag") btnSag.click();
+    }
+
+    // Yeni butonlar için tıklama işleyici:
+    newButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Önce tüm newButtons’un aktif durumunu kaldır
+            newButtons.forEach(b => {
+                b.classList.remove('active');
+                b.classList.add('all-white'); // tümü beyaz yap
+            });
+
+            // Tıklanan butonu aktif yap (kırmızı)
+            btn.classList.add('active');
+            btn.classList.remove('all-white');
+
+            // Hedef saati al, saniye olarak hesapla, setTime uygula
+            const targetTime = btn.getAttribute('data-target'); // "07:00" gibi
+            const secondsToTarget = getSecondsUntil(targetTime);
+
+            // Eğer süre çok kısa veya sıfırsa minimum 1sn yap (hata önleme)
+            const timeToSet = secondsToTarget > 0 ? secondsToTarget : 1;
+            setTime(timeToSet);
+
+            // İlgili tetikleyici butonu tetikle
+            const triggerSide = btn.getAttribute('data-trigger');
+            triggerPhysicalButton(triggerSide);
+
+            // Sayaç otomatik başlasın
+            if (!isRunning) toggleTimer();
+
+            // "01:30" butonunu beyaz bırak (eğer aktif değilse) -> bunu zaten all-white yaptık
+            // 01:30 butonu index: 8 (sıfır tabanlı), ya da id yok. Daha kolay indexe göre
+            // Özel kural: 01:30 butonu beyaz kalsın, aktif olsa bile kırmızı olmasın
+            // Bu kural sadece "01:30" butonu için geçerli.
+            newButtons.forEach(b => {
+                if (b.textContent.trim() === "01:30" && !b.classList.contains('active')) {
+                    b.classList.add('all-white');
+                }
+                // Eğer 01:30 aktif ise beyaz kalsın (yani kırmızı olmasın)
+                if (b.textContent.trim() === "01:30" && b.classList.contains('active')) {
+                    b.classList.remove('active');
+                    b.classList.add('all-white');
+                }
+            });
+        });
+    });
+
+    // İlk yüklemede timer ve saat güncelle
+    displayTimeLeft(timeLeft);
+    updateClock(timeLeft);
+    updateEndTime();
+
+    // Tablo işlemleri (Mevcut)
+
+    const dataTable = document.getElementById("dataTable").querySelector("tbody");
+
+    function addRow() {
+        const row = document.createElement("tr");
+
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('tr-TR') + ' ' + now.toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'});
+
+        const columns = [
+            {type: 'text', value: dateStr, readonly: true},
+            {type: 'number', value: 0},
+            {type: 'number', value: 0},
+            {type: 'number', value: 0},
+            {type: 'number', value: 0},
+            {type: 'number', value: 0},
+            {type: 'number', value: 0},
+            {type: 'number', value: 0},
+            {type: 'number', value: 0},
+            {type: 'number', value: 0},
+            {type: 'text', value: ''}
+        ];
+
+        columns.forEach(col => {
+            const td = document.createElement("td");
+            if (col.type === 'text') {
+                const input = document.createElement("input");
+                input.type = "text";
+                input.value = col.value;
+                if (col.readonly) input.readOnly = true;
+                td.appendChild(input);
+            } else if (col.type === 'number') {
+                const input = document.createElement("input");
+                input.type = "number";
+                input.value = col.value;
+                td.appendChild(input);
+            }
+            row.appendChild(td);
+        });
+        dataTable.appendChild(row);
+    }
+
+    function deleteRow() {
+        const rows = dataTable.querySelectorAll("tr");
+        if (rows.length > 0) {
+            dataTable.removeChild(rows[rows.length - 1]);
+        }
+    }
+
+    function clearTable() {
+        dataTable.innerHTML = "";
+    }
+
+    function exportToExcel() {
+        const workbook = XLSX.utils.book_new();
+        const table = document.getElementById("dataTable");
+        const ws = XLSX.utils.table_to_sheet(table);
+        XLSX.utils.book_append_sheet(workbook, ws, "Veriler");
+        XLSX.writeFile(workbook, "kayit_defteri.xlsx");
+    }
+
+</script>
 </body>
 </html>
